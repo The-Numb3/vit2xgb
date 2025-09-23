@@ -1,0 +1,50 @@
+base:
+  dataset_root: "./"
+  store_path: "./vit_store/feature_store.sqlite"
+  mlflow_uri: "http://127.0.0.1:5000"
+  mlflow_experiment: "vit_xgb_pipeline"
+
+experiments:
+  - name: fuse_nd_total_cont_pca64
+    embed:
+      model_name: "google/vit-base-patch16-224-in21k"
+      feature_type: "cls_mean"
+      preprocess_mode: "auto"
+      ms_mode: "fuse_rgb"
+      ms_wavelengths: "430,540"
+      ms_fill: "nd"
+      batch_size: 16
+      device: "cuda:0"
+    eval:
+      task: "reg"
+      target: "Total"
+      reg_mode: "continuous"
+      n_splits: 5
+      xgb_params: {"max_depth": 4, "n_estimators": 400, "learning_rate": 0.05,
+                   "subsample": 0.7, "colsample_bytree": 0.7, "reg_alpha": 0.5, "reg_lambda": 2.0}
+      pca:
+        enabled: true
+        dim: 32
+        whiten: false
+        random_state: 42
+    final_train:
+      registry_name: "vit-xgb-total-pca64"
+
+  - name: concat_grade_ordinal_no_pca
+    embed:
+      model_name: "google/vit-base-patch16-224-in21k"
+      feature_type: "cls_mean"
+      preprocess_mode: "auto"
+      ms_mode: "concat_cls"
+      ms_wavelengths: "430,540"
+      batch_size: 16
+      device: "cuda:0"
+    eval:
+      task: "reg"
+      target: "등급"
+      reg_mode: "ordinal"
+      n_splits: 5
+      pca:
+        enabled: true
+    final_train:
+      registry_name: "vit-xgb-grade-no-pca"

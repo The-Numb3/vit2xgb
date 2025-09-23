@@ -1,0 +1,25 @@
+# Ignore data files
+result/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore environment files
+.env
+.venv/
+
+# Ignore mlflow files(artifacts, models, etc.)
+mlruns/
+mlflow/
+models/
+mlartifacts/
+
+# Ignore output files
+vit_store/
+vit_output/
+
+# Ignore legacy files
+experiment_runner_mlflow_legacy.py
+train_and_register_xgb_legacy.py

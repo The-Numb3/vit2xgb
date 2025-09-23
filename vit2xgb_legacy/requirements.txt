@@ -1,0 +1,10 @@
+numpy==1.26.4
+opencv-python==4.9.0.80
+pillow==10.4.0
+transformers>=4.42
+timm
+torch
+pandas
+tqdm
+xgboost
+opencv-python
