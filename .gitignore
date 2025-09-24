@@ -1,24 +1,66 @@
 # Ignore data files
 result/
+processed/
 
 # Ignore Python cache files
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 
 # Ignore environment files
 .env
 .venv/
+env/
+venv/
 
 # Ignore mlflow files(artifacts, models, etc.)
 mlruns/
 mlflow/
 models/
 mlartifacts/
+mlflow.db
+*.db
 
 # Ignore output files
 vit_store/
 vit_output/
+vit_out_*/
+vit2xgb/processed/
+**/crops/
+
+# Ignore generated features and models
+features.npy
+*.npy
+*.pkl
+*.joblib
+
+# Ignore logs and reports
+*.log
+*.txt
+*_metrics.csv
+*_summary.txt
+embed_info.json
+
+# Ignore temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
 
 # Ignore legacy files
 experiment_runner_mlflow_legacy.py
