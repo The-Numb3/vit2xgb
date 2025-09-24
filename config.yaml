@@ -1,0 +1,58 @@
+base:
+  # vit2xgb_v2 폴더 기준 상대경로
+  dataset_root: ".."          # 원본(result/…) 루트
+  processed_dir: "./processed"
+  export_dir:    "./vit_out_demo"
+  device: "cuda:0"               # cuda | cpu (cuda는 자동 폴백)
+  batch_size: 16
+
+preprocess:
+  overwrite: true            # 이미 있던 crop 덮어쓸지
+
+embedding:
+  model_source: "hf_vit"      # hf_vit | timm_cnn | mlflow_torch
+
+  hf_vit:
+    model_name: "google/vit-base-patch16-224-in21k"
+    feature_type: "cls_mean"  # cls | mean | cls_mean
+    image_size: 224
+
+  timm_cnn:
+    model_name: "resnet50.tv_in1k"
+    pretrained: true
+    global_pool: "avg"
+    image_size: 224
+
+  mlflow_torch:
+    tracking_uri: "http://127.0.0.1:5000"
+    model_uri: "models:/beef-grade-backbone/Production"
+    image_size: 224
+    normalize:
+      mean: [0.485, 0.456, 0.406]
+      std:  [0.229, 0.224, 0.225]
+
+multispectral:
+  mode: "per_band"            # per_band | fuse_rgb | concat_cls  
+  wavelengths: [430, 540, 580]  # 각 파장을 개별적으로 처리
+  fill: "nd"
+
+eval:
+  task: "reg"                 # reg | clf
+  target: "Total"             # 메타의 타깃 컬럼명
+  reg_mode: "continuous"      # auto | continuous | ordinal
+  n_splits: 5
+  group_by: ""                # ex) "slaughter,session,day"
+  aggregate_by: ""            # ex) "slaughter,session,day"
+  xgb_params:
+    max_depth: 6              # 더 깊은 트리
+    n_estimators: 500         # 더 많은 트리
+    learning_rate: 0.03       # 더 낮은 학습률
+    subsample: 0.8            # 더 많은 서브샘플
+    colsample_bytree: 0.8     # 더 많은 컬럼 샘플
+    reg_alpha: 0.1            # L1 정규화 감소
+    reg_lambda: 1.0           # L2 정규화 감소
+  pca:
+    enabled: true             # ✅ PCA는 평가 단계에서만 적용
+    dim: 32                   # per_band 모드로 더 많은 샘플 예상
+    whiten: false
+    random_state: 42
